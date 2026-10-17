@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>클라이언트 전용 PDF 압축기 | Safe & Fast PDF Compressor</title>
+  <meta name="description" content="서버 전송 없이 100% 내 컴퓨터 브라우저 메모리에서 안전하게 처리되는 초고속 PDF 용량 압축 웹앱">
+
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Core Libraries (Loaded via CDN - Runs purely in-browser) -->
+  <!-- PDF.js for ultra-fast in-memory page rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- jsPDF for rebuilding optimized PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- pdf-lib for structural/lossless PDF optimization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.9/pdf-lib.min.js"></script>
+  <!-- JSZip for multi-file bulk download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="container header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M9 15h6"></path>
+            <path d="M12 12v6"></path>
+            <path d="m9 13 3-3 3 3"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>PDF <span class="gradient-text">Slimmer</span></h1>
+          <span class="brand-badge">Pure Client-Side</span>
+        </div>
+      </div>
+
+      <!-- Security / Privacy Trust Badge -->
+      <div class="security-badge" title="업로드된 모든 PDF는 사용자의 웹 브라우저 메모리 안에서만 처리되며, 어떤 외부 서버로도 전송되지 않습니다.">
+        <span class="security-dot"></span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>100% 로컬 브라우저 처리 (서버 전송 없음)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container main-content">
+    
+    <!-- Hero / Intro Section -->
+    <section class="hero-section">
+      <h2 class="hero-title">
+        대용량 PDF를 빠르고 안전하게 <span class="gradient-text">다이어트</span>하세요
+      </h2>
+      <p class="hero-desc">
+        별도 프로그램 설치나 서버 전송 없이, 웹 브라우저 메모리에서 직접 압축됩니다.<br>
+        대외비 문서, 개인정보가 담긴 계약서도 안심하고 처리하세요.
+      </p>
+    </section>
+
+    <!-- Compression Settings Control Panel -->
+    <section class="settings-card" id="settingsPanel">
+      <div class="card-header">
+        <div class="header-left">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <h3>압축 모드 및 품질 설정</h3>
+        </div>
+        <button type="button" class="btn-toggle-advanced" id="btnToggleAdvanced" aria-expanded="false">
+          고급 세부설정 
+          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Quick Preset Selection -->
+      <div class="preset-group">
+        <label class="preset-label">추천 압축 프리셋</label>
+        <div class="preset-options">
+          <button type="button" class="preset-btn active" data-preset="balanced">
+            <div class="preset-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="preset-info">
+              <span class="preset-name">스마트 균형 <span class="badge-recommend">추천</span></span>
+              <span class="preset-sub">화질 유지 + 약 60~80% 용량 절감</span>
+            </div>
+          </button>
+
+          <button type="button" class="preset-btn" data-preset="extreme">
+            <div class="preset-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"></polyline><polyline points="7 6 12 11 17 6"></polyline></svg>
+            </div>
+            <div class="preset-info">
+              <span class="preset-name">최대 압축 (초경량)</span>
+              <span class="preset-sub">이메일/포털 업로드용 (최대 90%↓)</span>
+            </div>
+          </button>
+
+          <button type="button" class="preset-btn" data-preset="highquality">
+            <div class="preset-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9z"></path></svg>
+            </div>
+            <div class="preset-info">
+              <span class="preset-name">고화질 보존</span>
+              <span class="preset-sub">인쇄/출력용 선명도 유지 (약 30~50%↓)</span>
+            </div>
+          </button>
+
+          <button type="button" class="preset-btn" data-preset="lossless">
+            <div class="preset-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+            </div>
+            <div class="preset-info">
+              <span class="preset-name">텍스트/벡터 무손실</span>
+              <span class="preset-sub">글자 래스터화 없이 구조 최적화</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Advanced Custom Controls (Collapsible) -->
+      <div class="advanced-controls" id="advancedControls">
+        <div class="controls-grid">
+          <!-- Quality Slider -->
+          <div class="control-item" id="qualityControlItem">
+            <div class="control-header">
+              <label for="qualitySlider">이미지 압축 품질 (JPEG Quality)</label>
+              <span class="slider-val" id="qualityValue">72%</span>
+            </div>
+            <input type="range" id="qualitySlider" min="20" max="95" value="72" step="1">
+            <span class="control-hint">낮을수록 용량이 대폭 줄어들고, 높을수록 화질이 선명합니다.</span>
+          </div>
+
+          <!-- Resolution / DPI Scale Slider -->
+          <div class="control-item" id="scaleControlItem">
+            <div class="control-header">
+              <label for="scaleSlider">해상도 스케일 (렌더링 배율)</label>
+              <span class="slider-val" id="scaleValue">1.25x</span>
+            </div>
+            <input type="range" id="scaleSlider" min="0.6" max="2.0" value="1.25" step="0.05">
+            <span class="control-hint">화면 해상도(DPI)를 낮춰 크기를 줄입니다. (기본: 1.25x ~120DPI)</span>
+          </div>
+
+          <!-- Grayscale / B&W Toggle -->
+          <div class="control-item switch-item">
+            <div class="switch-info">
+              <span class="switch-title">흑백(그레이스케일) 문서 변환</span>
+              <span class="control-hint">스캔 문서, 서류 등 컬러가 불필요한 경우 30% 추가 감축</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="grayscaleToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload / Drag & Drop Zone -->
+    <section class="upload-section">
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf,application/pdf" multiple hidden>
+        <div class="drop-icon-wrapper">
+          <svg class="drop-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+            <path d="M12 12v9"></path>
+            <path d="m16 16-4-4-4 4"></path>
+          </svg>
+        </div>
+        <h3 class="drop-title">여기로 PDF 파일을 끌어다 놓으세요</h3>
+        <p class="drop-subtitle">또는 <button type="button" class="btn-browse" id="btnBrowse">내 컴퓨터에서 파일 찾기</button></p>
+        <div class="drop-limits">
+          <span>여러 개의 PDF 파일 일괄 추가 가능</span>
+          <span>•</span>
+          <span>최대 용량 제한 없음</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Queue & Processing Section (Shown when files are added) -->
+    <section class="queue-section" id="queueSection" style="display: none;">
+      <div class="queue-header">
+        <div class="queue-title-wrapper">
+          <h3>작업 목록 <span class="queue-count" id="queueCount">0개</span></h3>
+        </div>
+        <div class="queue-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnClearAll">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+            목록 비우기
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnDownloadAll" style="display: none;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            전체 ZIP 다운로드
+          </button>
+          <button type="button" class="btn btn-primary" id="btnStartAll">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            선택한 파일 압축 시작
+          </button>
+        </div>
+      </div>
+
+      <!-- File Cards List -->
+      <div class="file-list" id="fileList">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Value Proposition / Security Explanation -->
+    <section class="features-section">
+      <div class="feature-card">
+        <div class="feature-icon feature-secure">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <h4>완벽한 데이터 보안</h4>
+        <p>네트워크를 통하지 않고 웹 브라우저 자체 JavaScript 엔진에서 처리되어, 원본 유출 위험이 0%입니다.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-fast">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <h4>초고속 인메모리 압축</h4>
+        <p>서버 업로드/다운로드 대기 시간 없이, 기기의 GPU/CPU 렌더링 성능을 활용하여 실시간으로 압축됩니다.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-flexible">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        </div>
+        <h4>다양한 압축 모드</h4>
+        <p>스캔본 대용량 압축부터 텍스트 무손실 최적화, 흑백 문서 변환까지 목적에 맞게 자유롭게 조절하세요.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Preview Modal -->
+  <div class="modal-overlay" id="previewModal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h3 id="previewTitle">PDF 미리보기</h3>
+          <span class="preview-page-indicator" id="previewPageIndicator">1 / 1 페이지</span>
+        </div>
+        <button type="button" class="btn-close-modal" id="btnCloseModal" aria-label="닫기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="preview-canvas-container" id="previewCanvasContainer">
+          <canvas id="previewCanvas"></canvas>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="preview-nav">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPrevPage">이전 페이지</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnNextPage">다음 페이지</button>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" id="btnDownloadFromModal">이 파일 다운로드</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-container">
+      <p>PDF Slimmer • 100% Client-Side Web Application • No Server Required</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
